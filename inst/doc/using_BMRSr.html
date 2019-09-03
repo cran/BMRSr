@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Adam Rawles" />
+
+<meta name="date" content="2019-08-30" />
+
+<title>Using BMRSr</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Using BMRSr</h1>
+<h4 class="author">Adam Rawles</h4>
+<h4 class="date">2019-08-30</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The BMRSr package provides a number of wrapper functions to make the Balancing Mechanism Reporting Service (BMRS) API provided by ELEXON easier to use. There’s a massive repository of very useful and interesting data held in BMRS, but the API itself is not particular intuitive, and can result in the user needing to repeat lots of steps in order to retrieve and the clean the data. This package is an effort to automate those boring steps, making it easier for the user to retrieve the data for their analysis.</p>
+<p>The first step in using the BMRS API is to read the documentation currently available: <a href="https://www.elexon.co.uk/wp-content/uploads/2017/06/bmrs_api_data_push_user_guide_v1.1.pdf">Balancing Mechanism Reporting System API</a>. This document tells you all of the available data items and what you can expect to get back. I’ve tried to include a couple of helper functions to list all data items, find what parameters you need for specific data items, but there’s a lot so this document will always be more detailed.</p>
+<p>Second, to actually access the BMRS API, you’ll need an API key. These are freely available by signing up through the ELEXON Portal: <a href="https://www.elexonportal.co.uk">ELEXON portal</a>.</p>
+</div>
+<div id="structure" class="section level1">
+<h1>Structure</h1>
+<p>Querying the BMRS API can be broken down into 4 parts:</p>
+<ul>
+<li>The request</li>
+<li>The response</li>
+<li>Parsing</li>
+<li>Everything else…</li>
+</ul>
+<p>So, all together, we need to generate and send a request, get a response back and then parse it.</p>
+<div id="end-to-end" class="section level2">
+<h2>End-to-end</h2>
+<p>To do all of these steps in one go and just get back the parsed response, use the <code>full_request()</code> function. We’ll go into a bit more detail about what exactly this function does, but it will essentially just builds the request, send it, clean the received data and then return it.</p>
+<p>To use the <code>full_request()</code> function, you’ll need to provide a few things:</p>
+<ul>
+<li><code>...</code>
+<ul>
+<li>These are all of the values that are going to be passed to the <code>build_call()</code> function (discussed below), which builds the url for the data we want. Look at the Building requests part of the vignette for what parameters to include here.</li>
+</ul></li>
+<li><code>get_params</code>
+<ul>
+<li>If you’re behind a company proxy or something similar, you’ll need to pass some extra parameters when you send your request. You can provide those parameters here as a named list, and the values will eventually be passed as parameters in the <code>httr::GET()</code> call.</li>
+</ul></li>
+<li><code>parse</code>
+<ul>
+<li>Do you want the response from the request to be parsed automatically, or left as a response object? Default is <code>TRUE</code></li>
+</ul></li>
+<li><code>clean_dates</code>
+<ul>
+<li>The API will often return date/time/datetime columns that are formatted as text. When true, the <code>full_request()</code> function will try and auto-convert those columns to their appropriate type. If it fails, you will still get a response, but there will also be a warning telling you that it didn’t work.</li>
+</ul></li>
+</ul>
+</div>
+<div id="building-and-sending-requests" class="section level2">
+<h2>Building and Sending Requests</h2>
+<div id="building-requests" class="section level3">
+<h3>Building requests</h3>
+<p>Building your API request is done through the <code>build_call()</code> function. Because there are three different <em>types</em> of data items held in BMRS, the build_call actually calls one of the three different functions to produce the API request needed for your data item. On the surface of it however, build_call will handle all of that for you.</p>
+<p>The <code>build_call()</code> function has a few required arguments:</p>
+<ul>
+<li><code>data_item</code>
+<ul>
+<li>This is the data item that you want to request - the code for this can be found in the BMRS documentation or by typing <code>get_data_items()</code></li>
+</ul></li>
+<li><code>api_key</code>
+<ul>
+<li>This is your API key that you’ve got from the ELEXON Portal</li>
+</ul></li>
+<li><code>...</code>
+<ul>
+<li>You’ll also need to provide the parameters that are required for your data item. So say you want to get temperature data for the last week, you’re going to need to enter your start and end dates.</li>
+<li>The easiest way to find out which parameters to need for your data item is to use <code>get_parameters(your_data_item)</code>. This will return a vector of the parameters your data item accepts.</li>
+<li>If you enter a parameter that isn’t accepted for your data item, you’ll get an error. If you fail to enter a parameter that your data item does need however, you won’t, so be careful.</li>
+</ul></li>
+</ul>
+<p>Aside from the required arguments, <code>build_call()</code> has some further optional arguments:</p>
+<ul>
+<li><code>api_version</code>
+<ul>
+<li>As of writing, the API is on version 1 so hopefully you won’t need to change this.</li>
+</ul></li>
+<li><code>service_type</code>
+<ul>
+<li>The API allows you to retrieve your data in either a CSV or XML format (with a few exceptions). The default for this value is “csv” but there are some data items that can only be returned in XML format, but you’ll get a warning if that’s the case.</li>
+</ul></li>
+</ul>
+</div>
+<div id="sending-requests" class="section level3">
+<h3>Sending requests</h3>
+<p>The sending of the API requests is done via the <code>send_request()</code> function.This function is essentially a wrapper to the <code>httr::GET()</code> function with a couple of changes to the parameters. The arguments for <code>send_request()</code> are:</p>
+<ul>
+<li><code>request</code>
+<ul>
+<li>This parameter should be a named list. The list itself must have at one named value: url. This url should be the url for the request you want to make. If you already have your url (i.e., you haven’t used the <code>build_call()</code> function), you can pass this to as the request parameter (as long as it’s in a named list).</li>
+<li>Alternatively, the <code>build_call()</code> function returns a named list (with one of the values being a url), so the result from a <code>build_call()</code> can be passed directly to <code>send_request()</code>.</li>
+</ul></li>
+<li><code>config_options</code>
+<ul>
+<li>You may have to configure proxy settings in order to access the API, so here you can provide a named list of parameters to be passed to the <code>httr::GET()</code> function that actually sends the request.</li>
+</ul></li>
+</ul>
+<p>The <code>send_request()</code> function will then return a response() object, with an added <code>$data_item</code> attribute. This data item value will be the data item that was specified in the <code>request</code> list (if one was specified).</p>
+</div>
+</div>
+<div id="parsing-and-cleaning" class="section level2">
+<h2>Parsing and Cleaning</h2>
+<p>Parsing the <code>response</code> object returned from the <code>send_request()</code> function is handled by the <code>parse_response()</code> function. This will take the response object, extract the returned data and then do some cleaning.</p>
+<p>The parameters for <code>parse_response()</code> are:</p>
+<ul>
+<li><code>response</code>
+<ul>
+<li>A response object returned from the API request (most likely the evaluated result of the <code>send_request()</code> function).</li>
+</ul></li>
+<li><code>format</code>
+<ul>
+<li>The format of the content of the response (i.e. did you ask for a “csv” or “xml”?)</li>
+</ul></li>
+<li><code>clean_dates</code>
+<ul>
+<li>Should columns that appear to be dates/times/datetimes be auto converted to the appropriate type? This is currently based on the name of the columns and so isn’t full proof. For example, some response csvs contain a ‘spot_time’ column that’s actually a datetime value.</li>
+</ul></li>
+</ul>
+<p>Depending on what format you specified, this function will either return a tibble (csv) or a list (xml). And there you have it, your complete API request and response!</p>
+</div>
+<div id="everything-else" class="section level2">
+<h2>Everything else…</h2>
+<p>In addition to the basic workflow of build, send, parse/clean, the package also provides some utility functions:</p>
+<ul>
+<li><code>get_data_items()</code>
+<ul>
+<li>This will return all of the available data items (the values that can be passed to the <code>full_request()</code> and <code>build_call()</code> functions.) This function just returns a list of the data item IDs, it doesn’t tell you what is returned for each one.</li>
+</ul></li>
+<li><code>get_parameters()</code>
+<ul>
+<li>When provided with a data item, this function will return all of parameters accepted by the API for that data item.</li>
+</ul></li>
+<li><code>get_function()</code>
+<ul>
+<li>When provided with a data item, this function will return which of the <code>build_x_call()</code> functions will be called for that data item.</li>
+</ul></li>
+<li><code>get_data_item_type()</code>
+<ul>
+<li>Returns the type of the data item provided. This is really only important to tell you which <code>build_x_call()</code> function to use but <code>build_call()</code> will work it out for you anyway so it’s suggested you use that.</li>
+</ul></li>
+<li><code>check_data_item()</code>
+<ul>
+<li>When provided with a data item and it’s type (one of “B Flow”, “REMIT” or “Legacy”), this function will return whether or not it is valid or not.</li>
+</ul></li>
+<li><code>get_column_names()</code>
+<ul>
+<li>When provided with a data item, this function will return a vector of the column headings for the csv response for that data item.</li>
+<li>This function was created as Legacy data items do not have column headings when returned as a csv.</li>
+</ul></li>
+<li><code>clean_date_columns()</code>
+<ul>
+<li>This function will attempt to auto-convert columns in the provided dataframe/tibble to the correct type. Often, the API will return date/time/datetime columns as plain text, and so this function will try to convert the type based on the column heading. This doesn’t always work…</li>
+</ul></li>
+</ul>
+</div>
+<div id="a-practical-example" class="section level2">
+<h2>A Practical Example</h2>
+<p>Now we understand the workflow associated with an API request, let’s do an example.</p>
+<p>We’ll do it twice, once just using the <code>full_request()</code> function, and then again using the functions provided for each step to ensure we know what’s going on under the hood.</p>
+<p>In this example, we’ll get some generation data by fuel type between the dates of 1 July 2019 and 3 July 2019 and then plot it using ggplot2. The dataset used is available in the package as <code>generation_dataset_example</code>.</p>
+<div id="full_request-approach" class="section level3">
+<h3><code>full_request()</code> approach</h3>
+<p>First things first, let’s create a variable to hold our API key…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">api_key &lt;-<span class="st"> &quot;your_api_key_here&quot;</span></code></pre></div>
+<p>Next, we’ve inspected the BMRS API documentation and found that we want the “FUELINST” data item. Let’s find out what parameters we need to provide for this data item…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_parameters</span>(<span class="st">&quot;FUELINST&quot;</span>)
+<span class="co">#&gt; [1] &quot;from_datetime&quot; &quot;to_datetime&quot;</span></code></pre></div>
+<p>So we’ve got to provide from_datetime and to_datetime. Now let’s create our request…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">generation_data &lt;-<span class="st"> </span><span class="kw">full_request</span>(<span class="dt">data_item =</span> <span class="st">&quot;FUELINST&quot;</span>,
+                                <span class="dt">api_key =</span> api_key,
+                                <span class="dt">from_datetime =</span> <span class="st">&quot;01 07 2019 00:00:00&quot;</span>,
+                                <span class="dt">to_datetime =</span> <span class="st">&quot;03 07 2019 00:00:00&quot;</span>,
+                                <span class="dt">parse =</span> <span class="ot">TRUE</span>,
+                                <span class="dt">clean_dates =</span> <span class="ot">TRUE</span>)</code></pre></div>
+</div>
+<div id="step-approach" class="section level3">
+<h3>Step approach</h3>
+<p>Again, let’s create a variable to hold our API key and find out what parameters we need for our “FUELINST” data item…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">api_key &lt;-<span class="st"> &quot;your_api_key_here&quot;</span>
+
+<span class="kw">get_parameters</span>(<span class="st">&quot;FUELINST&quot;</span>)</code></pre></div>
+<p>Next, let’s build our call…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">generation_data_request &lt;-<span class="st"> </span><span class="kw">build_call</span>(<span class="dt">data_item =</span> <span class="st">&quot;FUELINST&quot;</span>,
+                                      <span class="dt">api_key =</span> api_key,
+                                      <span class="dt">from_datetime =</span> <span class="st">&quot;01 07 2019 00:00:00&quot;</span>,
+                                      <span class="dt">to_datetime =</span> <span class="st">&quot;03 07 2019 00:00:00&quot;</span>,
+                                      <span class="dt">service_type =</span> <span class="st">&quot;csv&quot;</span>)</code></pre></div>
+<p>This is equivalent but shorter than…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_data_item_type</span>(<span class="st">&quot;FUELINST&quot;</span>)
+<span class="co">#This tells us which build_x_call() function to use</span>
+
+generation_data_request &lt;-<span class="st"> </span><span class="kw">build_legacy_call</span>(<span class="dt">data_item =</span> <span class="st">&quot;FUELINST&quot;</span>,
+                                             <span class="dt">api_key =</span> api_key,
+                                             <span class="dt">from_datetime =</span> <span class="st">&quot;01 07 2019 00:00:00&quot;</span>,
+                                             <span class="dt">to_datetime =</span> <span class="st">&quot;03 07 2019 00:00:00&quot;</span>,
+                                             <span class="dt">service_type =</span> <span class="st">&quot;csv&quot;</span>)</code></pre></div>
+<p>Now we’ve got our request, we can send it…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">generation_data_response &lt;-<span class="st"> </span><span class="kw">send_request</span>(<span class="dt">request =</span> generation_data_request)</code></pre></div>
+<p>And then parse it…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">generation_data &lt;-<span class="st"> </span><span class="kw">parse_response</span>(<span class="dt">response =</span> generation_data_response,
+                                  <span class="dt">format =</span> <span class="st">&quot;csv&quot;</span>,
+                                  <span class="dt">clean_dates =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>Linking all these together using the pipe, we’d get…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">generation_data &lt;-<span class="st"> </span><span class="kw">build_call</span>(<span class="dt">data_item =</span> <span class="st">&quot;FUELINST&quot;</span>,
+                              <span class="dt">api_key =</span> api_key,
+                              <span class="dt">from_datetime =</span> <span class="st">&quot;01 07 2019 00:00:00&quot;</span>,
+                              <span class="dt">to_datetime =</span> <span class="st">&quot;03 07 2019 00:00:00&quot;</span>,
+                              <span class="dt">service_type =</span> <span class="st">&quot;csv&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">send_request</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">parse_response</span>(<span class="dt">format =</span> <span class="st">&quot;csv&quot;</span>,
+                 <span class="dt">clean_dates =</span> <span class="ot">TRUE</span>)</code></pre></div>
+</div>
+<div id="plotting" class="section level3">
+<h3>Plotting</h3>
+<p>Now we’ve got the data, we can convert the dataset to the tidy format and then make a plot…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Load the libraries for a bit more cleaning and then plotting...</span>
+<span class="kw">library</span>(ggplot2, <span class="dt">quietly =</span> <span class="ot">TRUE</span>, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)
+<span class="kw">library</span>(dplyr, <span class="dt">quietly =</span> <span class="ot">TRUE</span>, <span class="dt">warn.conflicts =</span> <span class="ot">FALSE</span>)
+
+<span class="co">#Change the fuel types from columns to a grouping (tidy format)</span>
+generation_data &lt;-<span class="st"> </span>generation_data <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">settlement_period =</span> <span class="kw">as.factor</span>(settlement_period)) <span class="op">%&gt;%</span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="dt">key =</span> <span class="st">&quot;fuel_type&quot;</span>, <span class="dt">value =</span> <span class="st">&quot;generation_mw&quot;</span>, ccgt<span class="op">:</span>intnem)
+
+<span class="co">#Make a line graph of the different generation types</span>
+ggplot2<span class="op">::</span><span class="kw">ggplot</span>(<span class="dt">data =</span> generation_data, <span class="kw">aes</span>(<span class="dt">x =</span> spot_time, <span class="dt">y =</span> generation_mw, <span class="dt">colour =</span> fuel_type)) <span class="op">+</span>
+<span class="st">  </span>ggplot2<span class="op">::</span><span class="kw">geom_line</span>()</code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
