@@ -1,17 +1,17 @@
-## ----setup, include = FALSE----------------------------------------------
+## ----setup, include = FALSE---------------------------------------------------
 library(BMRSr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  api_key <- "your_api_key_here"
 
-## ------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
 get_parameters("FUELINST")
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  generation_data <- full_request(data_item = "FUELINST",
 #                                  api_key = api_key,
 #                                  from_datetime = "01 07 2019 00:00:00",
@@ -19,19 +19,19 @@ get_parameters("FUELINST")
 #                                  parse = TRUE,
 #                                  clean_dates = TRUE)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  api_key <- "your_api_key_here"
 #  
 #  get_parameters("FUELINST")
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  generation_data_request <- build_call(data_item = "FUELINST",
 #                                        api_key = api_key,
 #                                        from_datetime = "01 07 2019 00:00:00",
 #                                        to_datetime = "03 07 2019 00:00:00",
 #                                        service_type = "csv")
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  get_data_item_type("FUELINST")
 #  #This tells us which build_x_call() function to use
 #  
@@ -41,30 +41,30 @@ get_parameters("FUELINST")
 #                                               to_datetime = "03 07 2019 00:00:00",
 #                                               service_type = "csv")
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  generation_data_response <- send_request(request = generation_data_request)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  generation_data <- parse_response(response = generation_data_response,
 #                                    format = "csv",
 #                                    clean_dates = TRUE)
 
-## ----eval = FALSE--------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  generation_data <- build_call(data_item = "FUELINST",
 #                                api_key = api_key,
 #                                from_datetime = "01 07 2019 00:00:00",
 #                                to_datetime = "03 07 2019 00:00:00",
 #                                service_type = "csv") %>%
 #    send_request() %>%
-#    parse_response(format = "csv",
-#                   clean_dates = TRUE)
+#    parse_response()
 
-## ----eval= TRUE, echo = FALSE--------------------------------------------
+## ----eval= TRUE, echo = FALSE-------------------------------------------------
 generation_data <- generation_dataset_example
 
-## ----eval = TRUE, fig.width=7, fig.height=7, warning=FALSE---------------
+## ----eval = TRUE, fig.width=7, fig.height=7, warning=FALSE--------------------
 #Load the libraries for a bit more cleaning and then plotting...
 library(ggplot2, quietly = TRUE, warn.conflicts = FALSE)
+library(tidyr, quietly = TRUE, warn.conflicts = FALSE)
 library(dplyr, quietly = TRUE, warn.conflicts = FALSE)
 
 #Change the fuel types from columns to a grouping (tidy format)
