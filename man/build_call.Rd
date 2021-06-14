@@ -4,7 +4,14 @@
 \alias{build_call}
 \title{Build an API call (uses the appropriate function based on the data item)}
 \usage{
-build_call(data_item, api_key, service_type = "csv", api_version = "v1", ...)
+build_call(
+  data_item,
+  api_key,
+  service_type = c("csv", "xml"),
+  api_version = "v1",
+  warn = TRUE,
+  ...
+)
 }
 \arguments{
 \item{data_item}{character string; data item to be retrieved}
@@ -15,7 +22,13 @@ build_call(data_item, api_key, service_type = "csv", api_version = "v1", ...)
 
 \item{api_version}{character string; API version to use - currently only on version 1}
 
+\item{warn}{logical; should you be warned if any of the parameters you've supplied may not be appropriate for that data item?
+Default is TRUE.}
+
 \item{...}{values to be passed to appropriate build_x_call function}
+}
+\value{
+list; list with entries \code{url} for the call, \code{service_type} and \code{data_item}
 }
 \description{
 Build an API call (uses the appropriate function based on the data item)
@@ -27,11 +40,11 @@ build_call(data_item = "QAS", api_key = "12345",
 settlement_date = "01 Jun 2019", service_type = "xml")
 }
 \seealso{
-\code{\link{build_b_call}}
+\code{\link[=build_b_call]{build_b_call()}}
 
-\code{\link{build_remit_call}}
+\code{\link[=build_remit_call]{build_remit_call()}}
 
-\code{\link{build_legacy_call}}
+\code{\link[=build_legacy_call]{build_legacy_call()}}
 
 Other call-building functions: 
 \code{\link{build_b_call}()},

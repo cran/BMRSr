@@ -1,3 +1,6 @@
+#' @importFrom rlang .data
+NULL
+
 
 #' Get the correct function to create the API call depending on the data item
 #' @param data_item character string; data item to be retrieved
@@ -6,15 +9,11 @@
 #' @return function
 #' @export
 get_function <- function(data_item){
-  if (get_data_item_type(data_item) == "B Flow"){
-    return(build_b_call)
-  }
-  else if (get_data_item_type(data_item) == "REMIT"){
-    return(build_remit_call)
-  }
-  else if(get_data_item_type(data_item) == "Legacy"){
-    return(build_legacy_call)
-  }
+
+  switch(get_data_item_type(data_item),
+         "B Flow" = build_b_call,
+         "REMIT" = build_remit_call,
+         "Legacy" = build_legacy_call)
 }
 
 
@@ -41,7 +40,7 @@ get_data_item_type <- function(data_item){
 #' get_parameters("TEMP")
 #' @export
 get_parameters <- function(data_item){
-  return(get_parameters_list[[upper_case(data_item)]])
+  get_parameters_list[[upper_case(data_item)]]
 }
 
 
@@ -56,22 +55,17 @@ get_parameters <- function(data_item){
 #' check_data_item("B1720", "Legacy") #invalid - incorrect type
 #' check_data_item("B1111", "REMIT") #invalid - incorrect data item and type
 #' @export
-check_data_item <- function(data_item, type = "any", silent = FALSE){
-  if (type %in% c("B Flow", "Legacy", "REMIT", "any")){
-    if (data_item %!in% get_data_items(type)){
-      if (!silent){
-        warning(paste0("Requested data item is not a valid ", type, " flow"))
-      }
-      ret <- FALSE
+check_data_item <- function(data_item, type = c("any", "B Flow", "Legacy", "REMIT"), silent = FALSE){
+  type <- match.arg(type)
+  if (data_item %!in% get_data_items(type)){
+    if (!silent){
+      warning(paste0("Requested data item is not a valid ", type, " flow"))
     }
-    else {
-      ret <- TRUE
-    }
+    ret <- FALSE
+  } else {
+    ret <- TRUE
   }
-  else {
-    stop("type parameter is not valid")
-  }
-  return(ret)
+  ret
 }
 
 #' Get a vector containing all of the permissible data items
@@ -91,7 +85,7 @@ get_data_items <- function(type = "any") {
     }
 
   }
-  return(ret)
+  ret
 }
 
 #' Get the column names for a returned CSV Legacy dataset
@@ -105,7 +99,7 @@ get_column_names <- function(data_item){
     stop("Not a valid Legacy data item")
   }
 
-  return(get_column_names_list[[data_item]])
+  get_column_names_list[[data_item]]
 }
 
 #' Reformat date, time, and datetime columns
@@ -131,3 +125,33 @@ clean_date_columns <- function(x){
   }
   return(x)
 }
+
+#' Check the data item to ensure that it is valid for the version specified
+#'
+#' Currently, "B1610" is the only data item that no longer supports v1 and equally is the only data item that supports v2.
+#'
+#' @param data_item character; the data item to check
+#' @param version character/numeric; the API version, either as a number (e.g. `1`) or as a case-insensitive string (e.g. "v1" or "V2"). Default is 1.
+#' @param silent boolean; whether to show a warning if that version is not valid for the provided
+#' data item. Default is TRUE.
+#' @return boolean; returns `TRUE` if data_item is valid for the provided version, `FALSE` if it is not
+#' @export
+#' @examples
+#' check_data_item_version("B1610", 1)
+#' check_data_item_version("B1710", 1)
+check_data_item_version <- function(data_item, version = 1, silent = TRUE) {
+  if (is.character(version)) {
+     version <- as.numeric(stringr::str_extract(version, "\\d"))
+  }
+  if (data_item == "B1610" & version == 1) {
+    if (!silent) {
+      warning(paste0("Data item (", data_item, ") is not valid for provided version (", version, ")"), call. = FALSE)
+      FALSE
+    } else {
+      FALSE
+    }
+  } else {
+    TRUE
+  }
+}
+

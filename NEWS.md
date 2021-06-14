@@ -1,8 +1,47 @@
+# BMRSr 1.0.3
+
+* Added better error handling around the sending and parsing of requests as per CRAN policies
+
+# BMRSr 1.0.2.9000
+
+* Fixed issue where EOF files were showing warnings when being parsed because the EOF wasn't being removed.
+* Added check of data item to ensure that the data item is present for the provided version
+
+# BMRSr 1.0.2
+
+* Third CRAN release
+* Changes documented in 1.0.1 - 1.0.2 updates
+
+# BMRSr 1.0.1.9003
+
+* Added automatic cleaning of all parameters passed to the `build()` functions
+* Added `rlang` and `purrr` dependencies
+
+# BMRSr 1.0.1.9002
+
+* Expanded changes from `build_b_call()` to other `build` functions
+* Allowed for additional arbitrary parameters to the build calls (with warnings or without)
+
+# BMRSr 1.0.1.9001 
+
+*  Changes to build_b_call() function
+*  Collect query parameters using list input_query
+*  Use `httr::modify_url()` to build query
+*  Shorten long lines
+*  Added test 'Typical Request' to test_that
+*  Other cosmetic changes
+
+# BMRSr 1.0.1.9000
+
+* Changes to the API return values mean that the returned .csv files do not always have the same structure (#15).
+    + This bred a change to the parser to be more dynamic and allow for the different structures.
+    + This initial change has been made but further changes will need to be made to account for more file structures.
+
 # BMRSr 1.0.1
 
 * New CRAN release
 * Bug fixes documented in versions 1.0.0 - 1.0.1
-* New documentation website hosted at [bmrs.arawles.co.uk](http://bmrsr.arawles.co.uk)
+* New documentation website hosted at [bmrsr.arawles.co.uk](https://bmrsr.arawles.co.uk)
 * Updated links to BMRS documentation
 
 # BMRSr 1.0.0.9004

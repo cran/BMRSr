@@ -32,7 +32,7 @@ format_datetime <- function(dattime){
                                                         "%d%m%Y%H%M%OS",
                                                         "%d%b%Y%H%M%OS",
                                                         "%d%B%Y%H%M%OS"
-                                                        ))
+  ))
 
   datetime_return <- format(datetime_return, format = "%Y-%m-%d%%20%H:%M:%OS")
   return(datetime_return)
@@ -40,9 +40,9 @@ format_datetime <- function(dattime){
 
 format_time <- function(time){
   time_return <- as.POSIXct(time, tryFormats = c("%H%M%OS",
-                                  "%H:%M:%OS",
-                                  "%H-%M-%OS"
-                                  ))
+                                                 "%H:%M:%OS",
+                                                 "%H-%M-%OS"
+  ))
   return(format(time_return, format = "%H:%M:%OS"))
 }
 
@@ -68,4 +68,31 @@ upper_case <- function(x){
     ret <- x
   }
   return(ret)
+}
+
+
+
+#' Check the the provided Settlement Period value is valid
+#'
+#' Currently accepted values for Settlement Period is 1-50 and *
+#' @param period numeric/character; value to check. Must be numeric and between 1 and 50 or a character that's "*"
+#' @return character; period as character
+check_period <- function(period) {
+  if (!is.null(period)) {
+    if (period <= 0 | period > 50){
+      if (period != "*"){
+        stop("invalid period value")
+      }
+    }
+  }
+  as.character(period)
+}
+
+get_build_arguments <- function(params) {
+  params <- params[!names(params) %in% c("data_item", "api_version")]
+  params[!sapply(params, is.null)]
+}
+
+quiet_parse <- function(response, type = "text") {
+  suppressWarnings(httr::content(response, type, col_types = readr::cols()))
 }

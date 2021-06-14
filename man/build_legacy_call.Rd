@@ -31,7 +31,8 @@ build_legacy_call(
   trade_name = NULL,
   trade_type = NULL,
   api_version = "v1",
-  service_type = "csv"
+  service_type = "csv",
+  ...
 )
 }
 \arguments{
@@ -88,9 +89,11 @@ build_legacy_call(
 \item{api_version}{character string; version of the api to use (currently on v1)}
 
 \item{service_type}{character string; file format (csv or xml)}
+
+\item{...}{additional parameters that will be appended onto the query string}
 }
 \value{
-list; created url for the call, service type and data item
+list; list with entries \code{url} for the call, \code{service_type} and \code{data_item}
 }
 \description{
 Create an API call for legacy data

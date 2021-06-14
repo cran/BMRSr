@@ -17,8 +17,9 @@ build_b_call(
   end_time = NULL,
   start_date = NULL,
   end_date = NULL,
-  service_type = "csv",
-  api_version = "v1"
+  service_type = c("csv", "xml"),
+  api_version = "v1",
+  ...
 )
 }
 \arguments{
@@ -26,7 +27,8 @@ build_b_call(
 
 \item{api_key}{character string; api key retrieved from the Elexon portal}
 
-\item{settlement_date}{character string; settlement date (automatically cleaned by format_date)}
+\item{settlement_date}{character string;
+settlement date (automatically cleaned by format_date)}
 
 \item{period}{character string; settlement period}
 
@@ -48,18 +50,28 @@ build_b_call(
 
 \item{service_type}{character string; file format (csv or xml)}
 
-\item{api_version}{character string; version of the api to use (currently on v1)}
+\item{api_version}{character string;
+version of the api to use (currently on v1)}
+
+\item{...}{additional parameters that will be appended onto the query string}
 }
 \value{
-list; created url for the call, service type and data item
+list; list with entries \code{url} for the call, \code{service_type} and \code{data_item}
 }
 \description{
 Create an API call for B-data flows
 }
 \examples{
-build_b_call(data_item = "B1730", api_key = "12345", settlement_date = "14-12-2016")
-build_b_call(data_item = "B1510", api_key = "12345", start_date = "01 Jan 2019",
-start_time = "00:00:00", end_date = "02 Jan 2019", end_time = "24:00:00", service_type = "csv")
+\dontrun{
+    build_b_call(data_item = "B1730",
+    api_key = "12345", settlement_date = "14-12-2016")
+
+    build_b_call(data_item = "B1510",
+    api_key = "12345", start_date = "01 Jan 2019",
+    start_time = "00:00:00", end_date = "02 Jan 2019",
+    end_time = "24:00:00", service_type = "csv")
+}
+
 }
 \seealso{
 Other call-building functions: 
